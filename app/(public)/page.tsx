@@ -42,27 +42,27 @@ export default async function HomePage() {
             backgroundSize: "40px 40px",
           }}
         />
-        <div className="relative text-center px-4 max-w-4xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.3em] text-gray-400 uppercase mb-6">
+        <div className="relative text-center px-6 max-w-4xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.3em] text-gray-400 uppercase mb-5">
             Perfumes · Moda · Estilo
           </p>
-          <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-black mb-6 leading-none">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-black mb-5 leading-none">
             BLEE
             <span className="text-gray-300">STORE</span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-500 max-w-sm sm:max-w-xl mx-auto mb-8 leading-relaxed">
             Fragancias y moda que cuentan tu historia. Calidad premium, directamente a ti.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/perfumes"
-              className="px-8 py-4 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
+              className="w-full sm:w-auto px-8 py-4 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-sm text-center"
             >
               Ver perfumes
             </Link>
             <Link
               href="/ropa"
-              className="px-8 py-4 bg-white text-black text-sm font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+              className="w-full sm:w-auto px-8 py-4 bg-white text-black text-sm font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors text-center"
             >
               Ver ropa
             </Link>
@@ -72,17 +72,17 @@ export default async function HomePage() {
 
       {/* Perfumes destacados */}
       {perfumes.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="flex items-end justify-between mb-10">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">
+              <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-1">
                 Colección
               </p>
-              <h2 className="text-3xl font-bold text-black">Perfumes</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-black">Perfumes</h2>
             </div>
             <Link
               href="/perfumes"
-              className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
+              className="text-sm font-medium text-gray-500 hover:text-black transition-colors shrink-0 ml-4"
             >
               Ver todos →
             </Link>
@@ -96,18 +96,18 @@ export default async function HomePage() {
 
       {/* Ropa destacada */}
       {ropa.length > 0 && (
-        <section className="bg-gray-50 py-20">
+        <section className="bg-gray-50 py-14 sm:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-end justify-between mb-10">
+            <div className="flex items-end justify-between mb-8">
               <div>
-                <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">
+                <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-1">
                   Colección
                 </p>
-                <h2 className="text-3xl font-bold text-black">Moda</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-black">Moda</h2>
               </div>
               <Link
                 href="/ropa"
-                className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
+                className="text-sm font-medium text-gray-500 hover:text-black transition-colors shrink-0 ml-4"
               >
                 Ver todo →
               </Link>
@@ -121,10 +121,10 @@ export default async function HomePage() {
       )}
 
       {/* CTA Contacto */}
-      <section className="bg-black text-white py-20">
-        <div className="max-w-2xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-4">¿Tienes alguna duda?</h2>
-          <p className="text-gray-400 mb-8">
+      <section className="bg-black text-white py-14 sm:py-20">
+        <div className="max-w-2xl mx-auto text-center px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Tienes alguna duda?</h2>
+          <p className="text-gray-400 mb-8 text-sm sm:text-base">
             Contáctanos por WhatsApp y con gusto te ayudamos a elegir el producto
             perfecto para ti.
           </p>

@@ -33,7 +33,7 @@ export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <svg
-              className="w-16 h-16"
+              className="w-12 h-12 sm:w-16 sm:h-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -50,9 +50,9 @@ export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col gap-3">
+      <div className="p-3 sm:p-4 flex flex-col gap-2.5 sm:gap-3">
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+          <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
             {product.name}
           </h3>
           {product.description && (
@@ -72,8 +72,8 @@ export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
         )}
 
         {selected && (
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-black">
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <span className="text-base sm:text-lg font-bold text-black shrink-0">
               {formatPrice(selected.price)}
             </span>
             <a
@@ -85,10 +85,11 @@ export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 bg-[#25D366] text-white text-xs font-semibold rounded-xl hover:bg-[#20ba59] transition-colors shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-2.5 bg-[#25D366] text-white text-xs font-semibold rounded-xl hover:bg-[#20ba59] active:bg-[#1da851] transition-colors shadow-sm min-h-[40px]"
             >
-              <MessageCircle size={14} />
-              WhatsApp
+              <MessageCircle size={15} />
+              <span className="hidden xs:inline">WhatsApp</span>
+              <span className="xs:hidden">WA</span>
             </a>
           </div>
         )}

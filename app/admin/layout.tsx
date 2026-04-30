@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
-import { redirect } from "next/navigation";
 
 export default async function AdminLayout({
   children,
@@ -12,11 +11,13 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Login page doesn't use this layout
   return (
     <div className="flex min-h-screen bg-gray-50">
       {user && <AdminSidebar />}
-      <div className="flex-1 p-6 sm:p-8 overflow-auto">{children}</div>
+      {/* pt-14 en móvil para el header fijo del admin */}
+      <div className={`flex-1 overflow-auto ${user ? "pt-14 md:pt-0 p-4 sm:p-6 md:p-8" : ""}`}>
+        {children}
+      </div>
     </div>
   );
 }

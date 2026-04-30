@@ -24,20 +24,15 @@ export function ProductForm({ product }: ProductFormProps) {
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState(product?.name ?? "");
-  const [category, setCategory] = useState<Category>(
-    product?.category ?? "perfume"
-  );
+  const [category, setCategory] = useState<Category>(product?.category ?? "perfume");
   const [description, setDescription] = useState(product?.description ?? "");
-  const [imageUrl, setImageUrl] = useState<string | null>(
-    product?.image_url ?? null
-  );
+  const [imageUrl, setImageUrl] = useState<string | null>(product?.image_url ?? null);
   const [variants, setVariants] = useState<VariantRow[]>(
     product?.variants?.map((v) => ({ label: v.label, price: String(v.price) })) ?? []
   );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     if (!name.trim()) return toast.error("El nombre es requerido");
     if (variants.length === 0) return toast.error("Agrega al menos una variante");
     if (variants.some((v) => !v.label || !v.price))
@@ -78,7 +73,7 @@ export function ProductForm({ product }: ProductFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-2xl">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-2xl">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Nombre del producto"
@@ -114,14 +109,15 @@ export function ProductForm({ product }: ProductFormProps) {
         onChange={setVariants}
       />
 
-      <div className="flex gap-3 pt-2">
-        <Button type="submit" loading={loading} size="lg">
+      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        <Button type="submit" loading={loading} size="lg" className="w-full sm:w-auto">
           {product ? "Actualizar producto" : "Crear producto"}
         </Button>
         <Button
           type="button"
           variant="secondary"
           size="lg"
+          className="w-full sm:w-auto"
           onClick={() => router.back()}
         >
           Cancelar
