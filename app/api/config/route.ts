@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -17,10 +18,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await request.json();
@@ -31,7 +29,8 @@ export async function PUT(request: Request) {
     updated_at: new Date().toISOString(),
   }));
 
-  const { error } = await supabase
+  const admin = createAdminClient();
+  const { error } = await admin
     .from("site_config")
     .upsert(updates, { onConflict: "key" });
 

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -24,16 +25,14 @@ export async function PUT(
 ) {
   const { id } = await params;
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await request.json();
   const { name, category, image_url, description, variants } = body;
 
-  const { error: productError } = await supabase
+  const admin = createAdminClient();
+  const { error: productError } = await admin
     .from("products")
     .update({ name, category, image_url, description })
     .eq("id", id);
@@ -41,8 +40,7 @@ export async function PUT(
   if (productError)
     return NextResponse.json({ error: productError.message }, { status: 500 });
 
-  // Replace all variants
-  await supabase.from("product_variants").delete().eq("product_id", id);
+  await admin.from("product_variants").delete().eq("product_id", id);
 
   if (variants && variants.length > 0) {
     const variantRows = variants.map(
@@ -53,7 +51,7 @@ export async function PUT(
         sort_order: i,
       })
     );
-    const { error: variantsError } = await supabase
+    const { error: variantsError } = await admin
       .from("product_variants")
       .insert(variantRows);
 
@@ -70,13 +68,11 @@ export async function DELETE(
 ) {
   const { id } = await params;
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const { error } = await supabase.from("products").delete().eq("id", id);
+  const admin = createAdminClient();
+  const { error } = await admin.from("products").delete().eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });

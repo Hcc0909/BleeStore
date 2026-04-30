@@ -1,12 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const formData = await request.formData();
@@ -18,7 +16,8 @@ export async function POST(request: Request) {
   const filename = `${crypto.randomUUID()}.${ext}`;
   const buffer = await file.arrayBuffer();
 
-  const { error } = await supabase.storage
+  const admin = createAdminClient();
+  const { error } = await admin.storage
     .from("product-images")
     .upload(filename, buffer, {
       contentType: file.type,
@@ -27,9 +26,9 @@ export async function POST(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("product-images").getPublicUrl(filename);
+  const { data: { publicUrl } } = admin.storage
+    .from("product-images")
+    .getPublicUrl(filename);
 
   return NextResponse.json({ url: publicUrl });
 }

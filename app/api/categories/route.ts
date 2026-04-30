@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -20,7 +21,8 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { name, slug, variant_type, section, sort_order } = body;
 
-  const { data, error } = await supabase
+  const admin = createAdminClient();
+  const { data, error } = await admin
     .from("categories")
     .insert({ name, slug, variant_type, section, sort_order: sort_order ?? 0 })
     .select()

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -23,16 +24,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await request.json();
   const { name, category, image_url, description, variants } = body;
 
-  const { data: product, error: productError } = await supabase
+  const admin = createAdminClient();
+  const { data: product, error: productError } = await admin
     .from("products")
     .insert({ name, category, image_url, description })
     .select()
@@ -51,7 +50,7 @@ export async function POST(request: Request) {
       })
     );
 
-    const { error: variantsError } = await supabase
+    const { error: variantsError } = await admin
       .from("product_variants")
       .insert(variantRows);
 

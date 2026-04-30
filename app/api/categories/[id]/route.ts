@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function PUT(
@@ -11,7 +12,8 @@ export async function PUT(
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await request.json();
-  const { error } = await supabase.from("categories").update(body).eq("id", id);
+  const admin = createAdminClient();
+  const { error } = await admin.from("categories").update(body).eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
@@ -26,7 +28,8 @@ export async function DELETE(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const { error } = await supabase.from("categories").delete().eq("id", id);
+  const admin = createAdminClient();
+  const { error } = await admin.from("categories").delete().eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });

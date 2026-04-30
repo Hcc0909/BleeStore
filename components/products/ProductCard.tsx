@@ -1,26 +1,26 @@
 "use client";
 
-import { Product, ProductVariant } from "@/lib/types/database";
-import { buildWhatsAppUrl, formatPrice } from "@/lib/utils";
+import { Product } from "@/lib/types/database";
+import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
-import { useState } from "react";
-import { VariantSelector } from "./VariantSelector";
-import { MessageCircle } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
-  whatsappNumber: string;
+  onClick: () => void;
 }
 
-export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
+export function ProductCard({ product, onClick }: ProductCardProps) {
   const variants = product.variants ?? [];
   const sorted = [...variants].sort((a, b) => a.sort_order - b.sort_order);
-  const [selected, setSelected] = useState<ProductVariant | null>(
-    sorted[0] ?? null
-  );
+  const minPrice = sorted.length > 0 ? Math.min(...sorted.map((v) => v.price)) : null;
+  const maxPrice = sorted.length > 0 ? Math.max(...sorted.map((v) => v.price)) : null;
+  const showRange = product.category.includes("perfume") && sorted.length > 1 && minPrice !== maxPrice;
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+    <button
+      onClick={onClick}
+      className="group w-full text-left bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+    >
       {/* Square image */}
       <div className="relative aspect-square bg-gray-50 overflow-hidden">
         {product.image_url ? (
@@ -50,50 +50,22 @@ export function ProductCard({ product, whatsappNumber }: ProductCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-3 sm:p-4 flex flex-col gap-2.5 sm:gap-3">
-        <div>
-          <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
-            {product.name}
-          </h3>
-          {product.description && (
-            <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-              {product.description}
-            </p>
-          )}
-        </div>
-
-        {variants.length > 0 && (
-          <VariantSelector
-            variants={sorted}
-            selected={selected}
-            onSelect={setSelected}
-            category={product.category}
-          />
+      <div className="p-3 sm:p-4 flex flex-col gap-1.5">
+        <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
+          {product.name}
+        </h3>
+        {product.description && (
+          <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
         )}
-
-        {selected && (
-          <div className="flex items-center justify-between gap-2 pt-0.5">
-            <span className="text-base sm:text-lg font-bold text-black shrink-0">
-              {formatPrice(selected.price)}
-            </span>
-            <a
-              href={buildWhatsAppUrl(
-                whatsappNumber,
-                product.name,
-                product.category,
-                selected
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2.5 bg-[#25D366] text-white text-xs font-semibold rounded-xl hover:bg-[#20ba59] active:bg-[#1da851] transition-colors shadow-sm min-h-[40px]"
-            >
-              <MessageCircle size={15} />
-              <span className="hidden xs:inline">WhatsApp</span>
-              <span className="xs:hidden">WA</span>
-            </a>
-          </div>
+        {minPrice !== null && (
+          <p className="text-sm font-bold text-black mt-0.5">
+            {showRange
+              ? `${formatPrice(minPrice)} – ${formatPrice(maxPrice!)}`
+              : formatPrice(minPrice)}
+          </p>
         )}
+        <p className="text-xs text-gray-400 mt-0.5">Ver detalles →</p>
       </div>
-    </div>
+    </button>
   );
 }
