@@ -54,8 +54,17 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
           {product.name}
         </h3>
-        {product.description && (
-          <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
+        {sorted.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-0.5">
+            {sorted.map((v) => (
+              <span
+                key={v.id}
+                className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+              >
+                {v.label}
+              </span>
+            ))}
+          </div>
         )}
         {minPrice !== null && (
           <p className="text-sm font-bold text-black mt-0.5">
@@ -64,7 +73,6 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
               : formatPrice(minPrice)}
           </p>
         )}
-        <p className="text-xs text-gray-400 mt-0.5">Ver detalles →</p>
       </div>
     </button>
   );
