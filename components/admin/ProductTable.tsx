@@ -1,6 +1,6 @@
 "use client";
 
-import { CATEGORY_LABELS, Product } from "@/lib/types/database";
+import { Product } from "@/lib/types/database";
 import { formatPrice } from "@/lib/utils";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -89,7 +89,7 @@ export function ProductTable({ products }: ProductTableProps) {
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                        {CATEGORY_LABELS[product.category]}
+                        {product.category.replace(/_/g, " ")}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500 hidden lg:table-cell text-sm">
@@ -140,7 +140,7 @@ export function ProductTable({ products }: ProductTableProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 text-sm truncate">{product.name}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{CATEGORY_LABELS[product.category]}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{product.category.replace(/_/g, " ")}</p>
                   {product.variants && product.variants.length > 0 && (
                     <p className="text-xs text-gray-500 mt-0.5">
                       {formatPrice(Math.min(...product.variants.map((v) => v.price)))}

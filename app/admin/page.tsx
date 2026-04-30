@@ -1,27 +1,30 @@
 import { createClient } from "@/lib/supabase/server";
-import { CATEGORY_LABELS } from "@/lib/types/database";
 import { Package, Settings, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 async function getStats() {
   const supabase = await createClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select("id, category");
+  const [{ data: products }, { data: categories }] = await Promise.all([
+    supabase.from("products").select("id, category"),
+    supabase.from("categories").select("name, slug, section").eq("is_active", true).order("sort_order"),
+  ]);
 
   const total = products?.length ?? 0;
-  const byCategory = {
-    perfume: products?.filter((p) => p.category === "perfume").length ?? 0,
-    ropa: products?.filter((p) => p.category === "ropa").length ?? 0,
-    articulos_varios:
-      products?.filter((p) => p.category === "articulos_varios").length ?? 0,
-  };
 
-  return { total, byCategory };
+  // Agrupar conteo por slug de categoría
+  const byCat = new Map<string, number>();
+  products?.forEach((p) => {
+    byCat.set(p.category, (byCat.get(p.category) ?? 0) + 1);
+  });
+
+  return { total, byCat, categories: categories ?? [] };
 }
 
 export default async function AdminDashboard() {
-  const { total, byCategory } = await getStats();
+  const { total, byCat, categories } = await getStats();
+
+  const perfumes = categories.filter((c) => c.section === "perfume");
+  const ropa = categories.filter((c) => c.section !== "perfume");
 
   return (
     <div>
@@ -33,27 +36,25 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-gray-100 p-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 col-span-2 sm:col-span-1">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
             Total productos
           </p>
           <p className="text-3xl font-bold text-black">{total}</p>
         </div>
-        {(Object.entries(byCategory) as [keyof typeof byCategory, number][]).map(
-          ([cat, count]) => (
-            <div key={cat} className="bg-white rounded-2xl border border-gray-100 p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
-                {CATEGORY_LABELS[cat]}
-              </p>
-              <p className="text-3xl font-bold text-black">{count}</p>
-            </div>
-          )
-        )}
+        {categories.slice(0, 3).map((cat) => (
+          <div key={cat.slug} className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 truncate">
+              {cat.name}
+            </p>
+            <p className="text-3xl font-bold text-black">{byCat.get(cat.slug) ?? 0}</p>
+          </div>
+        ))}
       </div>
 
       {/* Quick actions */}
-      <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+      <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
         Acciones rápidas
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -79,7 +80,7 @@ export default async function AdminDashboard() {
           </div>
           <div>
             <p className="font-semibold text-gray-900">Configuración</p>
-            <p className="text-xs text-gray-500">Contacto, horario, alerta</p>
+            <p className="text-xs text-gray-500">Categorías, contacto, alerta</p>
           </div>
         </Link>
 

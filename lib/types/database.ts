@@ -1,4 +1,16 @@
-export type Category = "perfume" | "ropa" | "articulos_varios";
+export type VariantType = "ml" | "size";
+export type SectionType = "perfume" | "ropa" | "general";
+
+export interface CategoryDB {
+  id: string;
+  name: string;
+  slug: string;
+  variant_type: VariantType;
+  section: SectionType;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
 
 export type SizeLabel =
   | "ExtraChica"
@@ -13,7 +25,7 @@ export type SizeLabel =
 export interface Product {
   id: string;
   name: string;
-  category: Category;
+  category: string;
   image_url: string | null;
   description: string | null;
   created_at: string;
@@ -56,9 +68,3 @@ export const SIZES: SizeLabel[] = [
   "XXXL",
   "Unitalla",
 ];
-
-export const CATEGORY_LABELS: Record<Category, string> = {
-  perfume: "Perfume",
-  ropa: "Ropa",
-  articulos_varios: "Artículos Varios",
-};

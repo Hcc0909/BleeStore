@@ -1,17 +1,23 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PromoModal } from "@/components/alerts/PromoModal";
+import { WhatsAppFAB } from "@/components/ui/WhatsAppFAB";
 import { createClient } from "@/lib/supabase/server";
-import { SiteConfigMap } from "@/lib/types/database";
+import { CategoryDB, SiteConfigMap } from "@/lib/types/database";
 
-async function getConfig(): Promise<Partial<SiteConfigMap>> {
+async function getData(): Promise<{ config: Partial<SiteConfigMap>; categories: CategoryDB[] }> {
   const supabase = await createClient();
-  const { data } = await supabase.from("site_config").select("*");
+  const [{ data: configRows }, { data: categories }] = await Promise.all([
+    supabase.from("site_config").select("*"),
+    supabase.from("categories").select("*").eq("is_active", true).order("sort_order"),
+  ]);
+
   const config: Partial<SiteConfigMap> = {};
-  data?.forEach((row) => {
+  configRows?.forEach((row) => {
     (config as Record<string, string>)[row.key] = row.value;
   });
-  return config;
+
+  return { config, categories: categories ?? [] };
 }
 
 export default async function PublicLayout({
@@ -19,13 +25,15 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const config = await getConfig();
+  const { config, categories } = await getData();
+  const whatsapp = config.whatsapp_number ?? "6879990490";
 
   return (
     <>
-      <Navbar />
+      <Navbar categories={categories} />
       <main className="pt-16 flex-1">{children}</main>
       <Footer />
+      <WhatsAppFAB whatsappNumber={whatsapp} />
       <PromoModal
         message={config.alert_message ?? "¡Bienvenido a BleeStore!"}
         enabled={config.alert_enabled === "true"}

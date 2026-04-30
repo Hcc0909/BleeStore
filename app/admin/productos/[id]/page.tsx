@@ -12,11 +12,17 @@ export default async function EditarProductoPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: product } = await supabase
-    .from("products")
-    .select("*, variants:product_variants(*)")
-    .eq("id", id)
-    .single();
+  const [{ data: product }, { data: categories }] = await Promise.all([
+    supabase
+      .from("products")
+      .select("*, variants:product_variants(*)")
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("categories")
+      .select("*")
+      .order("sort_order"),
+  ]);
 
   if (!product) notFound();
 
@@ -32,7 +38,7 @@ export default async function EditarProductoPage({
       <h1 className="text-2xl font-bold text-gray-900 mb-6">
         Editar: {product.name}
       </h1>
-      <ProductForm product={product} />
+      <ProductForm product={product} categories={categories ?? []} />
     </div>
   );
 }
