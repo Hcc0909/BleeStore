@@ -1,7 +1,6 @@
 "use client";
 
 import { Product } from "@/lib/types/database";
-import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
 interface ProductCardProps {
@@ -12,9 +11,6 @@ interface ProductCardProps {
 export function ProductCard({ product, onClick }: ProductCardProps) {
   const variants = product.variants ?? [];
   const sorted = [...variants].sort((a, b) => a.sort_order - b.sort_order);
-  const minPrice = sorted.length > 0 ? Math.min(...sorted.map((v) => v.price)) : null;
-  const maxPrice = sorted.length > 0 ? Math.max(...sorted.map((v) => v.price)) : null;
-  const showRange = product.category.includes("perfume") && sorted.length > 1 && minPrice !== maxPrice;
 
   return (
     <button
@@ -65,13 +61,6 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
               </span>
             ))}
           </div>
-        )}
-        {minPrice !== null && (
-          <p className="text-sm font-bold text-black mt-0.5">
-            {showRange
-              ? `${formatPrice(minPrice)} – ${formatPrice(maxPrice!)}`
-              : formatPrice(minPrice)}
-          </p>
         )}
       </div>
     </button>
