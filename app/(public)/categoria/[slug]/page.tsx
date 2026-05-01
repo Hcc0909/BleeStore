@@ -3,6 +3,8 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { SiteConfigMap } from "@/lib/types/database";
 import { notFound } from "next/navigation";
 
+export const revalidate = 60;
+
 async function getData(slug: string) {
   const supabase = await createClient();
 

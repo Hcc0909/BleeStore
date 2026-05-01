@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ContactInfo } from "@/components/contact/ContactInfo";
-import { GoogleMapEmbed } from "@/components/contact/GoogleMapEmbed";
+import { MapWrapper } from "@/components/contact/MapWrapper";
 import { SiteConfigMap } from "@/lib/types/database";
 import { buildWhatsAppContactUrl } from "@/lib/utils";
 import { MessageCircle } from "lucide-react";
@@ -99,7 +99,7 @@ export default async function ContactoPage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <GoogleMapEmbed embedUrl={config.google_maps_embed ?? ""} />
+          <MapWrapper address={config.address ?? ""} />
           {config.address && (
             <p className="text-sm text-gray-600 text-center px-2">{config.address}</p>
           )}

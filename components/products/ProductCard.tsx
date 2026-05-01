@@ -6,9 +6,10 @@ import Image from "next/image";
 interface ProductCardProps {
   product: Product;
   onClick: () => void;
+  priority?: boolean;
 }
 
-export function ProductCard({ product, onClick }: ProductCardProps) {
+export function ProductCard({ product, onClick, priority = false }: ProductCardProps) {
   const variants = product.variants ?? [];
   const sorted = [...variants].sort((a, b) => a.sort_order - b.sort_order);
 
@@ -24,6 +25,8 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             src={product.image_url}
             alt={product.name}
             fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (

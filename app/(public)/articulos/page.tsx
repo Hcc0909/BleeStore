@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { SiteConfigMap } from "@/lib/types/database";
 
+export const revalidate = 60;
+
 async function getData() {
   const supabase = await createClient();
   const [productsRes, configRes] = await Promise.all([

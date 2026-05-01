@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { SiteConfigMap, CategoryDB } from "@/lib/types/database";
+
+export const revalidate = 60;
 import Link from "next/link";
 
 async function getData() {
