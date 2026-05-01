@@ -20,6 +20,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}
+
+/* Prevent double-tap zoom on buttons and links */
+button, a {
+  touch-action: manipulation;
+}
+
 @keyframes progress {
   from { width: 0% }
   to   { width: 100% }
