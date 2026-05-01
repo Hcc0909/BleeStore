@@ -69,11 +69,11 @@ export function SiteConfigForm({ config: initial }: SiteConfigFormProps) {
           placeholder="Lunes a Viernes 10:00 - 20:00"
         />
         <Textarea
-          label='Código de embed de Google Maps (iframe src="...")'
+          label="Coordenadas del mapa (DMS o decimal, ej: 25°33′38.8″N 108°28′16.3″W)"
           value={config.google_maps_embed ?? ""}
           onChange={(e) => set("google_maps_embed", e.target.value)}
-          placeholder="https://www.google.com/maps/embed?..."
-          rows={3}
+          placeholder="25°33′38.8″N 108°28′16.3″W  ó  25.5608, -108.4712"
+          rows={2}
         />
       </section>
 

@@ -99,7 +99,10 @@ export default async function ContactoPage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <MapWrapper address={config.address ?? ""} />
+          <MapWrapper
+            coords={config.google_maps_embed ?? ""}
+            address={config.address ?? ""}
+          />
           {config.address && (
             <p className="text-sm text-gray-600 text-center px-2">{config.address}</p>
           )}

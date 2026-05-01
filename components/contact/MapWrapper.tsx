@@ -11,6 +11,11 @@ const MapView = dynamic(() => import("./MapView"), {
   ),
 });
 
-export function MapWrapper({ address }: { address: string }) {
-  return <MapView address={address} />;
+interface MapWrapperProps {
+  coords: string;   // DMS or "lat,lng" — from google_maps_embed config field
+  address: string;  // fallback for geocoding + popup label
+}
+
+export function MapWrapper({ coords, address }: MapWrapperProps) {
+  return <MapView coords={coords} address={address} />;
 }
