@@ -58,6 +58,14 @@ export interface SiteConfigMap {
   alert_enabled: string;
 }
 
+export interface BannerImage {
+  id: string;
+  url: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 export const SIZES: SizeLabel[] = [
   "ExtraChica",
   "Chica",

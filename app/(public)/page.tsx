@@ -1,15 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { SearchBar } from "@/components/ui/SearchBar";
-import { SiteConfigMap, CategoryDB } from "@/lib/types/database";
+import { BannerCarousel } from "@/components/ui/BannerCarousel";
+import { SiteConfigMap, CategoryDB, BannerImage } from "@/lib/types/database";
+import Link from "next/link";
 
 export const revalidate = 60;
-import Link from "next/link";
 
 async function getData() {
   const supabase = await createClient();
 
-  const [productsRes, configRes, categoriesRes] = await Promise.all([
+  const [productsRes, configRes, categoriesRes, bannersRes] = await Promise.all([
     supabase
       .from("products")
       .select("*, variants:product_variants(*)")
@@ -17,6 +18,7 @@ async function getData() {
       .limit(8),
     supabase.from("site_config").select("*"),
     supabase.from("categories").select("*").eq("is_active", true).order("sort_order"),
+    supabase.from("banner_images").select("*").order("sort_order"),
   ]);
 
   const config: Partial<SiteConfigMap> = {};
@@ -28,11 +30,12 @@ async function getData() {
     products: productsRes.data ?? [],
     config,
     categories: categoriesRes.data ?? [],
+    banners: (bannersRes.data ?? []) as BannerImage[],
   };
 }
 
 export default async function HomePage() {
-  const { products, config, categories } = await getData();
+  const { products, config, categories, banners } = await getData();
 
   const perfumeCategories = categories.filter((c) => c.section === "perfume");
   const ropaCategories = categories.filter((c) => c.section === "ropa" || c.section === "general");
@@ -66,12 +69,10 @@ export default async function HomePage() {
             Fragancias y moda que cuentan tu historia. Calidad premium, directamente a ti.
           </p>
 
-          {/* Barra de búsqueda prominente */}
           <div className="max-w-lg mx-auto mb-8">
             <SearchBar placeholder="Buscar perfumes, ropa, artículos..." />
           </div>
 
-          {/* Links de categorías rápidas */}
           {categories.length > 0 && (
             <div className="flex flex-wrap justify-center gap-2">
               {categories.slice(0, 5).map((cat: CategoryDB) => (
@@ -87,12 +88,14 @@ export default async function HomePage() {
           )}
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-300">
           <span className="text-xs">Desliza</span>
           <div className="w-0.5 h-6 bg-gray-200 rounded-full" />
         </div>
       </section>
+
+      {/* Banner carousel */}
+      <BannerCarousel banners={banners} />
 
       {/* Perfumes destacados */}
       {perfumes.length > 0 && (
