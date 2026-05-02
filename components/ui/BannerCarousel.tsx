@@ -7,9 +7,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 interface BannerCarouselProps {
   banners: BannerImage[];
+  duration?: number;
 }
 
-export function BannerCarousel({ banners }: BannerCarouselProps) {
+export function BannerCarousel({ banners, duration = 5000 }: BannerCarouselProps) {
   const slides = banners.filter((b) => b.is_active);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -20,9 +21,9 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
 
   useEffect(() => {
     if (paused || slides.length <= 1) return;
-    const id = setInterval(next, 5000);
+    const id = setInterval(next, duration);
     return () => clearInterval(id);
-  }, [paused, next, slides.length]);
+  }, [paused, next, slides.length, duration]);
 
   if (slides.length === 0) return null;
 
@@ -117,8 +118,8 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
       {slides.length > 1 && !paused && (
         <div
           key={current}
-          className="absolute bottom-0 left-0 h-0.5 bg-white/60 animate-[progress_5s_linear]"
-          style={{ animationFillMode: "forwards" }}
+          className="absolute bottom-0 left-0 h-0.5 bg-white/60"
+          style={{ animation: `progress ${duration / 1000}s linear`, animationFillMode: "forwards" }}
         />
       )}
     </section>

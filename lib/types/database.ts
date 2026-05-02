@@ -56,6 +56,7 @@ export interface SiteConfigMap {
   store_hours: string;
   alert_message: string;
   alert_enabled: string;
+  banner_duration: string;
 }
 
 export interface BannerImage {

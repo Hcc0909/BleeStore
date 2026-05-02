@@ -95,7 +95,7 @@ export default async function HomePage() {
       </section>
 
       {/* Banner carousel */}
-      <BannerCarousel banners={banners} />
+      <BannerCarousel banners={banners} duration={Number(config.banner_duration) * 1000 || 5000} />
 
       {/* Perfumes destacados */}
       {perfumes.length > 0 && (

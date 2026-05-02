@@ -77,6 +77,18 @@ export function SiteConfigForm({ config: initial }: SiteConfigFormProps) {
         />
       </section>
 
+      {/* Banners */}
+      <section className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4">
+        <h2 className="font-semibold text-gray-900">Banners</h2>
+        <Input
+          label="Duración de cada banner (segundos)"
+          type="number"
+          value={config.banner_duration ?? "5"}
+          onChange={(e) => set("banner_duration", e.target.value)}
+          placeholder="5"
+        />
+      </section>
+
       {/* Alerta */}
       <section className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4">
         <h2 className="font-semibold text-gray-900">Mensaje de bienvenida / promoción</h2>

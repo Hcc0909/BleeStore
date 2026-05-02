@@ -36,7 +36,7 @@ export function ContactInfo({ config }: ContactInfoProps) {
           className="flex items-center justify-center gap-3 py-4 px-6 bg-[#25D366] text-white rounded-2xl hover:bg-[#20ba59] active:bg-[#1da851] transition-colors shadow-sm font-semibold text-base"
         >
           <WhatsAppIcon size={24} />
-          Pulse aquí para WhatsApp
+          Pulse
         </a>
       )}
 
@@ -49,7 +49,7 @@ export function ContactInfo({ config }: ContactInfoProps) {
           className="flex items-center justify-center gap-3 py-4 px-6 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 text-white rounded-2xl hover:opacity-90 active:opacity-80 transition-opacity shadow-sm font-semibold text-base"
         >
           <InstagramIcon size={24} />
-          Pulse aquí para Instagram
+          Pulse
         </a>
       )}
 
